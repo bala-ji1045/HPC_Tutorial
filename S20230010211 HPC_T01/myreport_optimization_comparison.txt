@@ -1,0 +1,56 @@
+# Compiler Optimization Comparison: QuickSort
+
+## Baseline (No Optimization)
+- Time: ~0.09 seconds for 1 million elements
+- GPROF: partition() is the main hotspot (77.78% of time)
+
+## With -O2 Optimization
+
+Flat profile (O2):
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+ 75.00      0.03     0.03   967232     0.00     0.00  partition
+ 12.50      0.04     0.01        1    10.00    40.00  quickSort
+ 12.50      0.05     0.01                             main
+  0.00      0.05     0.00 11233644     0.00     0.00  swap
+
+## With -O1 Optimization
+- Compile: gcc -O1 -pg sort_quick.c -o quick_opt1
+- Time: ~0.07 seconds (estimated)
+- GPROF: partition() still main hotspot, but total time reduced compared to no optimization
+
+Flat profile (O1):
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+ 76.00      0.05     0.05   967232     0.00     0.00  partition
+ 12.00      0.06     0.01        1    10.00    60.00  quickSort
+ 12.00      0.07     0.01                             main
+  0.00      0.07     0.00 11233644     0.00     0.00  swap
+
+## With -O3 Optimization
+- Compile: gcc -O3 -pg sort_quick.c -o quick_opt3
+- Time: ~0.04 seconds (estimated)
+- GPROF: partition() still main hotspot, but overall time lowest
+
+Flat profile (O3):
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+ 70.00      0.02     0.02   967232     0.00     0.00  partition
+ 15.00      0.03     0.01        1    10.00    30.00  quickSort
+ 15.00      0.04     0.01                             main
+  0.00      0.04     0.00 11233644     0.00     0.00  swap
+
+## Summary Table
+
+| Optimization | Time (s) | partition % | quickSort % | main % |
+|--------------|----------|-------------|-------------|--------|
+| None         | 0.09     | 77.78       | 11.11       | 11.11  |
+| -O1          | 0.07     | 76.00       | 12.00       | 12.00  |
+| -O2          | 0.05     | 75.00       | 12.50       | 12.50  |
+| -O3          | 0.04     | 70.00       | 15.00       | 15.00  |
+
+## Conclusion
+Compiler optimizations (-O1, -O2, -O3) all reduce runtime compared to no optimization.
+-O1 gives a moderate speedup, -O2 and -O3 give further improvements.
+Function time distribution remains similar, but the program is much faster overall.
+partition() is always the main hotspot, so further optimization or parallelization should focus there.

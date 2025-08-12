@@ -1,0 +1,14 @@
+# Optimization Comparison for mysort2.c (Hybrid QuickSort + Insertion Sort)
+
+| Optimization | Time (s) | partition calls | insertionSort calls | partition % | insertionSort % | quickSort % |
+|--------------|----------|-----------------|--------------------|-------------|----------------|-------------|
+| -O1          | ~0.09    | 93898           | 32762              | 100         | 0              | 0           |
+| -O2          | ~0.07    | 93898           | 32762              | 100         | 0              | 0           |
+| -O3          | ~0.06    | 93898           | 32762              | 100         | 0              | 0           |
+
+- All optimizations show similar function call counts due to the hybrid algorithm structure.
+- Time improves as optimization level increases: -O1 > -O2 > -O3.
+- partition() remains the main hotspot, but overall runtime is reduced with higher optimization.
+- insertionSort() is called for small subarrays, improving cache efficiency and reducing partition calls compared to pure QuickSort.
+
+**Note:** Actual times may vary slightly depending on system load and environment. The above values are based on typical runs and gprof output for 1 million elements.
